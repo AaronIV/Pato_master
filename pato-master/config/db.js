@@ -1,21 +1,27 @@
 const mysql = require('mysql2');
+const dotenv = require('dotenv');
 
-// Esto lee las variables que pusiste en el panel de Render
-const connection = mysql.createConnection({
+dotenv.config();
+
+// Creamos la conexión como la hizo el profe
+const conexion = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "pato_place",
     port: process.env.DB_PORT || 3306,
-    connectTimeout: 10000 // Le damos 10 segundos para conectar
+    // Esto es vital para que Render/Aiven no te rechacen la conexión
+    ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : false
 });
 
-connection.connect((err) => {
+// Conectar 
+conexion.connect((err) => {
     if (err) {
-        console.error('Error de conexión a la base de datos:', err.message);
+        console.error("❌ Error de conexión:", err.stack);
         return;
     }
-    console.log('¡Conectado exitosamente a la base de datos de Clever Cloud!');
+    console.log("✅ Conectado a la Base de Datos MySql (Estilo Profesor)");
 });
 
-module.exports = connection;
+// Exportar modulo (La forma tradicional)
+module.exports = conexion;

@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
     });
 });
 
+
 // Rutas manuales como las del profe
 app.get('/menu', (req, res) => res.render('menu'));
 app.get('/gallery', (req, res) => res.render('gallery'));
@@ -59,6 +60,31 @@ app.post('/login', (req, res) => {
         } else {
             res.send("<script>alert('Usuario o contraseña incorrectos'); window.location.href='/login';</script>");
         }
+    });
+});
+
+// 1. Muestra el formulario de registro
+app.get('/register', (req, res) => {
+    res.render('register'); // Carga views/register.ejs
+});
+
+// 2. Procesa los datos del formulario de registro
+app.post('/register', (req, res) => {
+    const { user, password } = req.body; // Estos deben coincidir con el 'name' de tus inputs
+
+    // Consulta para insertar el nuevo usuario
+    // Usamos 'nombre_user' y 'clave' porque así los tienes en tu login
+    const query = 'INSERT INTO usuario (nombre_user, clave) VALUES (?, ?)';
+    
+    db.query(query, [user, password], (err, result) => {
+        if (err) {
+            console.error("Error al registrar:", err);
+            return res.status(500).send("Error al registrar el usuario");
+        }
+        
+        // Si sale bien, lo mandamos al login para que entre
+        console.log("¡Usuario registrado con éxito!");
+        res.redirect('/login');
     });
 });
 

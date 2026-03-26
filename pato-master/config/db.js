@@ -7,9 +7,9 @@ dotenv.config();
 const conexion = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "pato_place",
-    port: process.env.DB_PORT || 3306,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
     // Esto es vital para que Render/Aiven no te rechacen la conexión
     ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : false
 });
